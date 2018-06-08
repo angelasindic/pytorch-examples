@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torchvision import datasets, transforms
-from models import LinearModel
+from models import LinearModel, SimpleCNN
 
 
 
@@ -17,7 +17,7 @@ def train(model, data_set, batch_size, epochs):
     max_batch_idx = len(train_loader) - 1
     for epoch in range(epochs):
         for batch_idx, (data, target) in enumerate(train_loader):
-            output = linMod(data)
+            output = model(data)
             loss = criterion(output, target)
 
             if batch_idx == max_batch_idx:
@@ -61,10 +61,11 @@ test_data = datasets.MNIST(root='./data/',
                            transform=tf)
 torch.manual_seed(33)
 
-linMod = LinearModel()
+#model = LinearModel()
+model = SimpleCNN()
 batch_size = 64
-epochs = 5
+epochs = 50
 
-train(linMod, test_data, batch_size, epochs)
+train(model, test_data, batch_size, epochs)
 
-print("percentage correctly classified images: ", eval(linMod, test_data))
+print("percentage correctly classified images: ", eval(model, test_data))
