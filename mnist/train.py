@@ -23,8 +23,8 @@ def train(model, data_set, batch_size, epochs):
             if batch_idx == max_batch_idx:
                 print("epoch:", epoch, "loss: ",loss)
 
-            # Before! backward psss, clear all gradients from steps before
-            # such that new weight could be learn for this instance/epoch of training
+            # Before! backward pass, clear all gradients from steps before
+            # such that new weight could be learned for this instance/epoch of training
             optimizer.zero_grad()
 
             # backward pass, compute gradients with repect to the given loss and model parameters
@@ -36,6 +36,8 @@ def train(model, data_set, batch_size, epochs):
 
 def eval(model, test_data_set):
     test_loader = torch.utils.data.DataLoader(dataset=test_data_set)
+    
+    # switch of tracking gradients
     with torch.no_grad():
         correct = 0
         total = 0
