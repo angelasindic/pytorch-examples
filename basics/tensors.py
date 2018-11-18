@@ -18,3 +18,6 @@ ranarr = torch.randn(2,3,5)
 print(ranarr)
 "3 dim tensor indexing: channel,depth..., than row, col"
 print(ranarr[1,1,1])
+
+a = torch.randn(4, 4)
+print("argmax of \n", a, "\n ", torch.argmax(a, 1))
