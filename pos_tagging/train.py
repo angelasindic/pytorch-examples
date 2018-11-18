@@ -10,16 +10,16 @@ def create_word_idx(words):
     word_to_index = {k: v for v, k in enumerate(set(words))}
     return word_to_index
 
-def create_tag_idx(sentences):
-    tags = {t for sent in sentences for (_,t) in sent}
+def create_tag_idx(tagged_sentences):
+    tags = {t for s in tagged_sentences for (_,t) in s}
     tag_to_index = {k: t for t, k in enumerate(tags)}
     return tag_to_index
 
 
-def convertToVec(sentence, word_idx, tag_idx):
+def convertToVec(tagged_sentence, word_idx, tag_idx):
     wordvec = []
     tagvec = []
-    for w, t in sentence:
+    for w, t in tagged_sentence:
         wordvec.append(word_idx[w]), tagvec.append(tag_idx[t])
 
     return torch.tensor(wordvec), torch.tensor(tagvec)
@@ -67,6 +67,9 @@ print("len sentences: ", len(sentences), "training: ", len(training_data), "test
 
 vocab_size = len(word_to_index)
 target_size = len(tag_to_index)
+
+print("vocab_size: ", vocab_size)
+print("target_size (#tags): ", target_size)
 
 model = POSModel(embedding_dim, hidden_dim, vocab_size, target_size)
 

@@ -8,7 +8,7 @@ class POSModel(nn.Module):
 
         super(POSModel, self).__init__()
 
-        self.embedding_dim = embedding_dim
+        # remove ?! self.embedding_dim = embedding_dim
         self.hidden_dim = hidden_dim
 
         self.embeddings = nn.Embedding(vocab_size, embedding_dim)
