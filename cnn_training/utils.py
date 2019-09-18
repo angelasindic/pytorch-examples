@@ -2,6 +2,8 @@ import torch
 from torchvision import datasets, transforms
 from torch.distributions import Categorical
 
+use_cuda = torch.cuda.is_available()
+device = torch.device("cuda:0" if use_cuda else "cpu")
 
 def load_data(batch_size=32, transform=None, train=True):
     
@@ -16,6 +18,7 @@ def load_data(batch_size=32, transform=None, train=True):
 
     
 def train(model, criterion, optimizer, trainloader, epochs, print_every):
+    model.to(device)
     model.train()
     running_losses = []
     running_loss = .0
@@ -25,6 +28,8 @@ def train(model, criterion, optimizer, trainloader, epochs, print_every):
 
             # Flatten images into a batch_size X (width*height) dim. tensor
             #images = images.view(images.shape[0], -1)
+            images = images.to(device)
+            labels = labels.to(device)
 
             # clear gradients
             optimizer.zero_grad()
@@ -55,6 +60,9 @@ def train_and_eval(model, criterion, optimizer, trainloader, epochs, eval_every)
     for epoch in range(epochs):
 
         for mini_batch, (images, labels) in enumerate(trainloader, 1):
+            
+            images = images.to(device)
+            labels = labels.to(device)
 
             # Flatten images into a batch_size X (width*height) dim. tensor
             images = images.view(images.shape[0], -1)
@@ -85,14 +93,15 @@ def train_and_eval(model, criterion, optimizer, trainloader, epochs, eval_every)
 
 
 def eval_model(model, criterion, optimizer, testloader):
-    
     model.eval()
     accuracy = .0
     eval_loss = .0
     with torch.no_grad():
 
         for mini_batch, (images,labels) in enumerate(testloader, 1):
-
+            images = images.to(device)
+            labels = labels.to(device)
+            
             #forward pas to get logprobs
             probs = model(images)
             
